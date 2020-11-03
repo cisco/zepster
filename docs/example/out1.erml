@@ -1,0 +1,370 @@
+generated_datetime: '2020-10-15T22:02:20.126921'
+source: ../docs/example/er_diagram.graphml
+
+entities:
+- entity:
+    attributes:
+      version:
+        required: true
+        type: string
+        unique: within_parent
+    description: A specific flavor of ice cream
+    name: search_radius
+    note: Question about whether this is declared  or inferred
+- entity:
+    attributes:
+      date_applicable_begin:
+        note: Date time zone is UTC
+        required: true
+        type: date
+      date_applicable_end:
+        note: Date time zone is UTC
+        required: true
+        type: date
+      matter:
+        required: true
+        type: enum
+      scientist_id:
+        note: multiple scientists
+        required: true
+        type: string
+    name: state
+    note: "question\n+ date or datetime?\n+ are all states the same?  \n+ other?"
+- entity:
+    attributes:
+      fin_location:
+        type: enum
+    name: bird
+    note: '[many more fields]'
+- entity:
+    name: snake_scarer
+- entity:
+    name: music_maker
+- entity:
+    name: elbow_pad
+    note: 'same for rollerblade and longboard?
+
+
+      E.g. LandShark'
+- entity:
+    name: county
+- entity:
+    attributes:
+      version:
+        required: true
+        type: string
+        unique: within_parent
+    description: High-quality loamy topsoil
+    name: coffee_ground
+- entity:
+    attributes:
+      name:
+        required: true
+        type: string
+        unique: true
+    description: A device to determine altitude
+    name: altimiter
+    note: '[need a way to distinguish between altimiters that are self-contained and
+      those which need satellites]'
+- entity:
+    description: These are things that are subject to being replaced
+    name: pentode
+- entity:
+    description: many-to-many mapping table
+    name: coffee_ground_mm_search_radius
+- entity:
+    attributes:
+      headstock:
+        required: true
+        type: enum
+        unique: within_parent
+    name: torque_converter
+- entity:
+    attributes:
+      headstock:
+        required: true
+        type: enum
+        unique: within_parent
+    name: ranch
+- entity:
+    attributes:
+      headstock:
+        required: true
+        type: enum
+        unique: within_parent
+    name: portafilter
+- entity:
+    attributes:
+      version:
+        required: true
+        type: string
+        unique: within_parent
+    name: facilitator
+- entity:
+    attributes:
+      headstock:
+        required: true
+        type: enum
+        unique: within_parent
+    name: facet
+- entity:
+    attributes:
+      headstock:
+        description: For presenting similar things together in a UI
+        required: true
+        type: enum
+      name:
+        required: true
+        type: string
+        unique: true
+    description: '"Kind of coffee liked most.
+
+
+      There are TWO KINDS of preferences:
+
+
+      - indivudual
+
+      - group"'
+    name: coffee_preference
+- entity:
+    attributes:
+      headstock:
+        description: For rotating inventory like vinyl records, lazy susans, or hubcaps
+        required: true
+        type: enum
+      name:
+        required: true
+        type: string
+        unique: true
+    description: A waterway for transporting televisions via boat or barge.
+    name: television_channel
+- entity:
+    description: many-to-many mapping table
+    name: search_radius_mm_facilitator
+- entity:
+    attributes:
+      headstock:
+        required: true
+        type: enum
+        unique: within_parent
+    name: scoville_unit
+- entity:
+    attributes:
+      id:
+        required: true
+        type: integer
+        unique: true
+    description: This is a condition on a boundary
+    name: boundary_condition
+    note: '[From conference call]
+
+      [Where is the boundary?]'
+enums:
+- enum:
+    name: enum_headstock
+    values:
+    - MARTIN_STYLE
+    - GUILD_STYLE
+    - CLASSICAL
+    - INLINE
+- enum:
+    name: enum_fin_location
+    values:
+    - DORSAL
+    - VENTRAL
+    - PECTORAL
+    - PELVIC
+    - CAUDAL
+- enum:
+    description: 'Matter state.  Do we need a paper?
+
+      '
+    name: enum_matter
+    note: These are not the official values.  This is just a placeholder for the real
+      values.
+    values:
+    - SOLID
+    - description: Is semisolid a solid or a liquid?
+      value: LIQUID
+    - GAS
+    - PLASMA
+relationships:
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: snake_scarer
+    - kind: base_class
+      name: bird
+- relationship:
+    participants:
+    - kind: zero_or_more
+      name: search_radius
+    - kind: zero_or_more
+      name: bird
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: music_maker
+    - kind: base_class
+      name: bird
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: state
+    - kind: zero_or_more
+      name: county
+- relationship:
+    participants:
+    - kind: one
+      name: state
+    - kind: zero_or_one
+      name: state
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: altimiter
+    - kind: zero_or_more
+      name: search_radius
+- relationship:
+    participants:
+    - kind: one
+      name: pentode
+    - kind: zero_or_more
+      name: state
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: portafilter
+    - kind: base_class
+      name: pentode
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: torque_converter
+    - kind: base_class
+      name: pentode
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: ranch
+    - kind: base_class
+      name: pentode
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: search_radius
+    - kind: zero_or_more
+      name: torque_converter
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: coffee_ground_mm_search_radius
+    - kind: zero_or_more
+      name: ranch
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: coffee_ground
+    - kind: zero_or_more
+      name: portafilter
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: facilitator
+    - kind: zero_or_more
+      name: facet
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: coffee_preference
+    - kind: zero_or_more
+      name: coffee_ground
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: coffee_ground
+    - kind: zero_or_more
+      name: facilitator
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: television_channel
+    - kind: zero_or_more
+      name: facilitator
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: facet
+    - kind: base_class
+      name: pentode
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: search_radius
+    - kind: zero_or_more
+      name: coffee_ground_mm_search_radius
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: coffee_ground
+    - kind: zero_or_more
+      name: coffee_ground_mm_search_radius
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: facilitator
+    - kind: zero_or_more
+      name: search_radius_mm_facilitator
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: search_radius
+    - kind: zero_or_more
+      name: search_radius_mm_facilitator
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: one
+      name: search_radius_mm_facilitator
+    - kind: zero_or_more
+      name: scoville_unit
+- relationship:
+    defining: 'true'
+    participants:
+    - kind: subclass
+      name: scoville_unit
+    - kind: base_class
+      name: pentode
+- relationship:
+    participants:
+    - kind: one
+      name: boundary_condition
+    - kind: one
+      name: state
+- relationship:
+    participants:
+    - kind: zero_or_more
+      name: boundary_condition
+    - kind: zero_or_one
+      name: elbow_pad
+

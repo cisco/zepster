@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: zepster
+Version: 0.1
+Summary: Generate data-related artifacts from an Entity-Relationship diagram
+Home-page: https://tip-gitlab-01.cisco.com/tip/integration/utils/zepster
+Author: Cisco Systems, Inc.
+Author-email: sthand@cisco.com
+License: MIT
+Description: Generate database schema SQL, Python enums, documentation, and other data-related artifacts from an Entity-Relationship diagram, which is created as a GraphML file using the yEd graph editor.
+Keywords: database data er entity relationship diagram model modeling MDE
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Topic :: Database
+Description-Content-Type: text/markdown

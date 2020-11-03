@@ -1,45 +1,176 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+<!--
+Copyright 2020 Cisco Systems, Inc. and its affiliates.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+    http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License
+-->
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+# Zepster: Model-Driven Engineering Toolset for Data
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+Zepster implements 
+[Model-Driven Engineering (MDE)](https://en.wikipedia.org/wiki/Model-driven_engineering)
+for data.  It creates a consistent
+set of data-related artifacts to drive development with 
+- better alignment among business stakeholders and developers
+- fewer bugs
+- increased productivity
+
+## Summary
+
+Zepster lets you:
+
+- Use 
+[Entity-Relationship Modeling](https://en.wikipedia.org/wiki/Entity–relationship_model)
+to describe entitites, attributes, and the relationships between entities in an
+[Entity-Relationship Diagram (ERD)](http://www2.cs.uregina.ca/~bernatja/crowsfoot.html)
+- Convert ERDs into Entity-Relationship Markup Language (ERML) files
+- Generate data-related files from the ERML, such as:
+  - Relational database schema
+  - Database catalog
+  - Python enum definitions
+
+## Details
+
+### Entity-Relationship Modeling Using yEd Graph Editor
+
+First, create an ERD for your business use case, using 
+[yEd](https://www.yworks.com/products/yed) 
+graph editor.
+The yEd application is free and is available for MacOS, Linux, and Windows.
+
+With yEd you can create a diagram that shows
+- business entities
+- their attributes
+- how entities are related to each other
+
+The resulting diagram is saved as a 
+[GraphML](http://graphml.graphdrawing.org/index.html)
+file, which is an industry-standard format for graphs.
+
+### Generate Entity-Relationship Markup Language (ERML) File
+
+Next, generate an Entity-Relationship Markup Language (ERML) file from the
+saved GraphML diagram file.  To do this, use the ```generml``` script:
+
+```
+Usage: generml.py [OPTIONS]
+
+  Read an Entity-Relationship diagram created by the yEd graph editor and
+  convert it into Entity-Relationship Markup Language
+
+  References:
+  yEd - https://www.yworks.com/products/yed
+  GraphML - http://graphml.graphdrawing.org/index.html
+
+Options:
+  --input TEXT    Input GraphML file (default is standard input, also
+                  represented by a dash "-")
+  --output TEXT   Output ERML file (default is standard output, also
+                  represented by a dash "-")
+  --overwrite     If specified, overwrite the output file if it already exists
+  --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                  WARNING, ERROR, CRITICAL
+  --help          Show this message and exit.
+```
+
+The ERML is an intermediate language that decouples downstream tools (such
+as the relational database schema generator) from
+the specific graph editor tool (yEd).  In theory, any tool that creates
+ERML can serve as an input source for generating downstream files.
+
+After generating the ERML file, you can generate a number of things, described below.
+
+### Generate SQL Relational Database Schema Definitions
+
+Next, you can generate the schema definitions that define the tables for 
+a relational database, using SQL.  To do this, use the ```genschema``` script:
+
+```
+Usage: genschema.py [OPTIONS]
+
+  Read an Entity-Relationship Markup Language file and write a database
+  schema SQL file
+
+Options:
+  --input TEXT    Input Entity-Relationship Markup Language file (default is
+                  standard input, also represented by a dash "-")
+  --output TEXT   Output schema definition file (default is standard output,
+                  also represented by a dash "-")
+  --overwrite     If specified, overwrite the output file if it already exists
+  --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                  WARNING, ERROR, CRITICAL
+  --dialect TEXT  Set the database dialect: (currently only "crdb")
+  --help          Show this message and exit.
+```
+
+### Generate Database Catalog Using Markdown
+
+You can also generate a database catalog to document the database for users.
+The catalog is created using GitHub-flavored
+[Markdown](https://en.wikipedia.org/wiki/Markdown)
+format.  To do this, use the ```gencatalog``` script:
+
+```
+Usage: gencatalog.py [OPTIONS]
+
+  Read an Entity-Relationship Markup Language
+  file and write a data catalog output file
+
+Options:
+  --input TEXT    Input Entity-Relationship Markup Language file (default is
+                  standard input, also represented by a dash "-")
+  --output TEXT   Output catalog file (default is standard output, also
+                  represented by a dash "-")
+  --overwrite     If specified, overwrite the output file if it already exists
+  --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                  WARNING, ERROR, CRITICAL
+  --format TEXT   Set the catalog format: (currently only "md")
+  --help          Show this message and exit.
+```
+
+### Generate Python Enum Definitions
+
+You can also generate Python enum definitions from the ERML file.  This can
+reduce application bugs.  To do this, use the ```genpyenums``` script:
+
+```
+Usage: genpyenums.py [OPTIONS]
+
+  Generate Python enum declarations from an Entity-Relationship Markup
+  Language (ERML) file
+
+Options:
+  --input TEXT    Input Entity-Relationship Markup Language file (default is
+                  standard input, also represented by a dash "-")
+  --output TEXT   Output schema definition file (default is standard output,
+                  also represented by a dash "-")
+  --overwrite     If specified, overwrite the output file if it already exists
+  --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                  WARNING, ERROR, CRITICAL
+  --help          Show this message and exit.
+```
 
 ---
 
-## Edit a file
-
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
-
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
-
----
-
-## Create a file
-
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+Copyright 2020 Cisco Systems, Inc. and its affiliates.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");  
+you may not use this file except in compliance with the License.  
+You may obtain a copy of the License at  
+ 
+    http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software  
+distributed under the License is distributed on an "AS IS" BASIS,  
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
+See the License for the specific language governing permissions and  
+limitations under the License  
