@@ -23,12 +23,13 @@ Note:
 
 from setuptools import setup
 
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(name='zepster',
-      version='0.1',
+      version='0.1.1',
       description='Generate data-related artifacts from an Entity-Relationship diagram',
-      long_description='Generate database schema SQL, Python enums, documentation, and '
-          'other data-related artifacts from an Entity-Relationship diagram, which is created '
-          'as a GraphML file using the yEd graph editor.',
+      long_description=long_description,
       long_description_content_type="text/markdown",
       classifiers=[
         'Programming Language :: Python',
@@ -36,7 +37,7 @@ setup(name='zepster',
         'Topic :: Database',
       ],
       keywords='database data er entity relationship diagram model modeling MDE',
-      url='https://cto-github.cisco.com/sthand/zepster',
+      url='https://github.com/cisco/zepster',
       author='Steven Hand',
       author_email='zepster@datasciguy.com',
       license='Apache',

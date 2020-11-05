@@ -1,14 +1,191 @@
 Metadata-Version: 2.1
 Name: zepster
-Version: 0.1
+Version: 0.1.1
 Summary: Generate data-related artifacts from an Entity-Relationship diagram
-Home-page: https://tip-gitlab-01.cisco.com/tip/integration/utils/zepster
-Author: Cisco Systems, Inc.
-Author-email: sthand@cisco.com
-License: MIT
-Description: Generate database schema SQL, Python enums, documentation, and other data-related artifacts from an Entity-Relationship diagram, which is created as a GraphML file using the yEd graph editor.
+Home-page: https://github.com/cisco/zepster
+Author: Steven Hand
+Author-email: zepster@datasciguy.com
+License: Apache
+Description: <!--
+        Copyright 2020 Cisco Systems, Inc. and its affiliates.
+         
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+         
+            http://www.apache.org/licenses/LICENSE-2.0
+         
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License
+        -->
+        
+        # Zepster: Model-Driven Engineering Toolset for Data
+        
+        Zepster implements 
+        [Model-Driven Engineering (MDE)](https://en.wikipedia.org/wiki/Model-driven_engineering)
+        for data.  It creates a consistent
+        set of data-related artifacts to drive development with 
+        - better alignment among business stakeholders and developers
+        - fewer bugs
+        - increased productivity
+        
+        ## Summary
+        
+        Zepster lets you:
+        
+        - Use 
+        [Entity-Relationship Modeling](https://en.wikipedia.org/wiki/Entity–relationship_model)
+        to describe entitites, attributes, and the relationships between entities in an
+        [Entity-Relationship Diagram (ERD)](http://www2.cs.uregina.ca/~bernatja/crowsfoot.html)
+        - Convert ERDs into Entity-Relationship Markup Language (ERML) files
+        - Generate data-related files from the ERML, such as:
+          - Relational database schema
+          - Database catalog
+          - Python enum definitions
+        
+        ## Details
+        
+        ### Entity-Relationship Modeling Using yEd Graph Editor
+        
+        First, create an ERD for your business use case, using 
+        [yEd](https://www.yworks.com/products/yed) 
+        graph editor.
+        The yEd application is free and is available for MacOS, Linux, and Windows.
+        
+        With yEd you can create a diagram that shows
+        - business entities
+        - their attributes
+        - how entities are related to each other
+        
+        The resulting diagram is saved as a 
+        [GraphML](http://graphml.graphdrawing.org/index.html)
+        file, which is an industry-standard format for graphs.
+        
+        ### Generate Entity-Relationship Markup Language (ERML) File
+        
+        Next, generate an Entity-Relationship Markup Language (ERML) file from the
+        saved GraphML diagram file.  To do this, use the ```generml``` script:
+        
+        ```
+        Usage: generml.py [OPTIONS]
+        
+          Read an Entity-Relationship diagram created by the yEd graph editor and
+          convert it into Entity-Relationship Markup Language
+        
+          References:
+          yEd - https://www.yworks.com/products/yed
+          GraphML - http://graphml.graphdrawing.org/index.html
+        
+        Options:
+          --input TEXT    Input GraphML file (default is standard input, also
+                          represented by a dash "-")
+          --output TEXT   Output ERML file (default is standard output, also
+                          represented by a dash "-")
+          --overwrite     If specified, overwrite the output file if it already exists
+          --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                          WARNING, ERROR, CRITICAL
+          --help          Show this message and exit.
+        ```
+        
+        The ERML is an intermediate language that decouples downstream tools (such
+        as the relational database schema generator) from
+        the specific graph editor tool (yEd).  In theory, any tool that creates
+        ERML can serve as an input source for generating downstream files.
+        
+        After generating the ERML file, you can generate a number of things, described below.
+        
+        ### Generate SQL Relational Database Schema Definitions
+        
+        Next, you can generate the schema definitions that define the tables for 
+        a relational database, using SQL.  To do this, use the ```genschema``` script:
+        
+        ```
+        Usage: genschema.py [OPTIONS]
+        
+          Read an Entity-Relationship Markup Language file and write a database
+          schema SQL file
+        
+        Options:
+          --input TEXT    Input Entity-Relationship Markup Language file (default is
+                          standard input, also represented by a dash "-")
+          --output TEXT   Output schema definition file (default is standard output,
+                          also represented by a dash "-")
+          --overwrite     If specified, overwrite the output file if it already exists
+          --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                          WARNING, ERROR, CRITICAL
+          --dialect TEXT  Set the database dialect: (currently only "crdb")
+          --help          Show this message and exit.
+        ```
+        
+        ### Generate Database Catalog Using Markdown
+        
+        You can also generate a database catalog to document the database for users.
+        The catalog is created using GitHub-flavored
+        [Markdown](https://en.wikipedia.org/wiki/Markdown)
+        format.  To do this, use the ```gencatalog``` script:
+        
+        ```
+        Usage: gencatalog.py [OPTIONS]
+        
+          Read an Entity-Relationship Markup Language
+          file and write a data catalog output file
+        
+        Options:
+          --input TEXT    Input Entity-Relationship Markup Language file (default is
+                          standard input, also represented by a dash "-")
+          --output TEXT   Output catalog file (default is standard output, also
+                          represented by a dash "-")
+          --overwrite     If specified, overwrite the output file if it already exists
+          --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                          WARNING, ERROR, CRITICAL
+          --format TEXT   Set the catalog format: (currently only "md")
+          --help          Show this message and exit.
+        ```
+        
+        ### Generate Python Enum Definitions
+        
+        You can also generate Python enum definitions from the ERML file.  This can
+        reduce application bugs.  To do this, use the ```genpyenums``` script:
+        
+        ```
+        Usage: genpyenums.py [OPTIONS]
+        
+          Generate Python enum declarations from an Entity-Relationship Markup
+          Language (ERML) file
+        
+        Options:
+          --input TEXT    Input Entity-Relationship Markup Language file (default is
+                          standard input, also represented by a dash "-")
+          --output TEXT   Output schema definition file (default is standard output,
+                          also represented by a dash "-")
+          --overwrite     If specified, overwrite the output file if it already exists
+          --logging TEXT  Set logging to the specified level: NOTSET, DEBUG, INFO,
+                          WARNING, ERROR, CRITICAL
+          --help          Show this message and exit.
+        ```
+        
+        ---
+        
+        Copyright 2020 Cisco Systems, Inc. and its affiliates.
+         
+        Licensed under the Apache License, Version 2.0 (the "License");  
+        you may not use this file except in compliance with the License.  
+        You may obtain a copy of the License at  
+         
+            http://www.apache.org/licenses/LICENSE-2.0
+         
+        Unless required by applicable law or agreed to in writing, software  
+        distributed under the License is distributed on an "AS IS" BASIS,  
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
+        See the License for the specific language governing permissions and  
+        limitations under the License  
+        
 Keywords: database data er entity relationship diagram model modeling MDE
 Platform: UNKNOWN
-Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python
+Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Topic :: Database
 Description-Content-Type: text/markdown
